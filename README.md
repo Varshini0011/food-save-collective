@@ -2,7 +2,7 @@
 
 ## Project info
 
-**URL**:foodwastemanagementt.netlify.app
+**URL**:https://foodwastemanagementt.netlify.app/
 
 ## How can I edit this code?
 
