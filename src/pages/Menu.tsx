@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { 
@@ -11,7 +10,8 @@ import {
   Plus,
   Minus,
   ShoppingBag,
-  CalendarClock
+  CalendarClock,
+  X
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -34,15 +34,14 @@ const canteens = [
   }
 ];
 
-// Menu categories
+// Menu categories - Removed "sides" category
 const categories = [
   { id: 'main', name: 'Main Courses' },
-  { id: 'sides', name: 'Side Dishes' },
   { id: 'desserts', name: 'Desserts' },
   { id: 'drinks', name: 'Beverages' },
 ];
 
-// Menu items based on canteen ID
+// Menu items based on canteen ID - Updated prices to be more affordable
 const menuItems = {
   1: [
     {
@@ -51,7 +50,7 @@ const menuItems = {
       description: "Fresh pasta with seasonal vegetables and homemade tomato sauce",
       image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1780&q=80",
       category: "main",
-      price: { small: 5.99, medium: 7.99, large: 9.99 },
+      price: { small: 3.99, medium: 5.49, large: 6.99 },
       preparationTime: "15 min",
       dietary: ["vegetarian"],
     },
@@ -61,7 +60,7 @@ const menuItems = {
       description: "Crisp romaine lettuce with grilled chicken, parmesan, and creamy dressing",
       image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80",
       category: "main",
-      price: { small: 6.49, medium: 8.49, large: 10.49 },
+      price: { small: 4.49, medium: 5.99, large: 7.49 },
       preparationTime: "10 min",
       dietary: ["protein-rich"],
     },
@@ -70,8 +69,8 @@ const menuItems = {
       name: "Garlic Bread",
       description: "Toasted bread with garlic butter and herbs",
       image: "https://images.unsplash.com/photo-1573140247632-f8fd74997d5c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80",
-      category: "sides",
-      price: { small: 2.99, medium: 3.99, large: 4.99 },
+      category: "main",
+      price: { small: 1.99, medium: 2.49, large: 2.99 },
       preparationTime: "8 min",
       dietary: ["vegetarian"],
     },
@@ -81,7 +80,7 @@ const menuItems = {
       description: "Rich chocolate brownie with walnuts",
       image: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1772&q=80",
       category: "desserts",
-      price: { small: 3.49, medium: 4.49, large: 5.49 },
+      price: { small: 1.99, medium: 2.49, large: 2.99 },
       preparationTime: "5 min",
       dietary: ["contains-nuts"],
     },
@@ -91,7 +90,7 @@ const menuItems = {
       description: "Freshly squeezed orange juice",
       image: "https://images.unsplash.com/photo-1600271886742-f049cd451bba?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1787&q=80",
       category: "drinks",
-      price: { small: 2.99, medium: 3.99, large: 4.99 },
+      price: { small: 1.49, medium: 1.99, large: 2.49 },
       preparationTime: "3 min",
       dietary: ["vegan"],
     },
@@ -103,7 +102,7 @@ const menuItems = {
       description: "Multigrain toast with smashed avocado, cherry tomatoes, and microgreens",
       image: "https://images.unsplash.com/photo-1588137378633-dea1707cee5a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80",
       category: "main",
-      price: { small: 6.99, medium: 8.99, large: 10.99 },
+      price: { small: 3.99, medium: 5.49, large: 6.99 },
       preparationTime: "10 min",
       dietary: ["vegetarian", "vegan-option"],
     },
@@ -113,7 +112,7 @@ const menuItems = {
       description: "Protein-rich quinoa with roasted vegetables and tahini dressing",
       image: "https://images.unsplash.com/photo-1511690656952-34342bb7c2f2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1964&q=80",
       category: "main",
-      price: { small: 7.49, medium: 9.49, large: 11.49 },
+      price: { small: 4.49, medium: 5.99, large: 7.49 },
       preparationTime: "12 min",
       dietary: ["vegan", "gluten-free"],
     },
@@ -122,8 +121,8 @@ const menuItems = {
       name: "Sweet Potato Fries",
       description: "Crispy baked sweet potato fries with herb seasoning",
       image: "https://images.unsplash.com/photo-1578160112054-954a67602b88?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80",
-      category: "sides",
-      price: { small: 3.49, medium: 4.49, large: 5.49 },
+      category: "main",
+      price: { small: 2.49, medium: 2.99, large: 3.49 },
       preparationTime: "15 min",
       dietary: ["vegan", "gluten-free"],
     },
@@ -133,7 +132,7 @@ const menuItems = {
       description: "Chia seeds soaked in almond milk with berries and honey",
       image: "https://images.unsplash.com/photo-1559598467-f8b76c8155d0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1771&q=80",
       category: "desserts",
-      price: { small: 4.99, medium: 5.99, large: 6.99 },
+      price: { small: 2.99, medium: 3.99, large: 4.49 },
       preparationTime: "5 min",
       dietary: ["vegetarian"],
     },
@@ -143,7 +142,7 @@ const menuItems = {
       description: "Spinach, kale, banana, and almond milk smoothie",
       image: "https://images.unsplash.com/photo-1622597467886-df0ae6b8b448?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80",
       category: "drinks",
-      price: { small: 4.49, medium: 5.49, large: 6.49 },
+      price: { small: 2.49, medium: 2.99, large: 3.49 },
       preparationTime: "5 min",
       dietary: ["vegan"],
     },
@@ -155,7 +154,7 @@ const menuItems = {
       description: "Asian-style noodles with vegetables and your choice of protein",
       image: "https://images.unsplash.com/photo-1617093727343-374698b1b08d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80",
       category: "main",
-      price: { small: 7.99, medium: 9.99, large: 11.99 },
+      price: { small: 4.99, medium: 6.49, large: 7.99 },
       preparationTime: "15 min",
       dietary: ["customizable"],
     },
@@ -165,7 +164,7 @@ const menuItems = {
       description: "Classic pizza with tomato sauce, mozzarella, and fresh basil",
       image: "https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80",
       category: "main",
-      price: { small: 8.49, medium: 10.49, large: 12.49 },
+      price: { small: 4.99, medium: 6.49, large: 7.99 },
       preparationTime: "20 min",
       dietary: ["vegetarian"],
     },
@@ -174,8 +173,8 @@ const menuItems = {
       name: "Hummus & Pita",
       description: "Creamy hummus with warm pita bread",
       image: "https://images.unsplash.com/photo-1586185118245-8a374d131493?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1772&q=80",
-      category: "sides",
-      price: { small: 4.99, medium: 5.99, large: 6.99 },
+      category: "main",
+      price: { small: 2.99, medium: 3.49, large: 3.99 },
       preparationTime: "8 min",
       dietary: ["vegan"],
     },
@@ -185,7 +184,7 @@ const menuItems = {
       description: "New York style cheesecake with berry compote",
       image: "https://images.unsplash.com/photo-1524351199678-941a58a3df50?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1771&q=80",
       category: "desserts",
-      price: { small: 5.49, medium: 6.49, large: 7.49 },
+      price: { small: 2.99, medium: 3.99, large: 4.49 },
       preparationTime: "5 min",
       dietary: ["vegetarian"],
     },
@@ -195,7 +194,7 @@ const menuItems = {
       description: "Smooth cold brew coffee with optional milk",
       image: "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1769&q=80",
       category: "drinks",
-      price: { small: 3.99, medium: 4.99, large: 5.99 },
+      price: { small: 1.99, medium: 2.49, large: 2.99 },
       preparationTime: "2 min",
       dietary: ["vegan-option"],
     },
