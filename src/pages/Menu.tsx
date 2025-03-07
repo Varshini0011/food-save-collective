@@ -65,16 +65,6 @@ const menuItems = {
       dietary: ["protein-rich"],
     },
     {
-      id: 103,
-      name: "Garlic Bread",
-      description: "Toasted bread with garlic butter and herbs",
-      image: "https://images.unsplash.com/photo-1573140247632-f8fd74997d5c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80",
-      category: "main",
-      price: { small: 1.99, medium: 2.49, large: 2.99 },
-      preparationTime: "8 min",
-      dietary: ["vegetarian"],
-    },
-    {
       id: 104,
       name: "Chocolate Brownie",
       description: "Rich chocolate brownie with walnuts",
